@@ -1,0 +1,19 @@
+{
+    "name": "@yourusername/web-analytics-tracker",
+    "version": "1.0.0",
+    "description": "Lightweight web analytics tracking script",
+    "main": "dist/analytics-tracker.min.js",
+    "scripts": {
+      "build": "terser src/analytics-tracker.js -o dist/analytics-tracker.min.js"
+    },
+    "keywords": [
+      "analytics",
+      "tracking",
+      "appwrite"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "devDependencies": {
+      "terser": "^5.24.0"
+    }
+  }
