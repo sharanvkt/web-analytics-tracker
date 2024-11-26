@@ -9,7 +9,13 @@
     const config = {
         endpoint: null,
         projectId: null,
-        initialized: false
+        initialized: false,
+        DATABASE_ID: 'analytics_db',
+        COLLECTIONS: {
+            page_views: '67460888002b2e21ceae', // Update with your collection ID
+            time_tracking: '67460945001156693068', // Update with your collection ID
+            user_sessions: '6746090b0004e00e5989' // Update with your collection ID
+        }
     };
 
     class Analytics {
@@ -31,6 +37,12 @@
             config.endpoint = endpoint;
             config.projectId = projectId;
             config.initialized = true;
+
+            console.log('Analytics initialized with:', {
+                endpoint,
+                projectId,
+                sessionId: this.sessionId
+            });
 
             // Start tracking
             this.startTracking();
@@ -57,14 +69,23 @@
                 return;
             }
 
+            const url = `${config.endpoint}/databases/${config.DATABASE_ID}/collections/${config.COLLECTIONS[collection]}/documents`;
+            
+            console.log('Sending analytics data:', {
+                url,
+                collection,
+                data
+            });
+
             try {
-                const response = await fetch(`${config.endpoint}/databases/analytics_db/collections/${collection}/documents`, {
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Appwrite-Project': config.projectId
                     },
                     body: JSON.stringify({
+                        documentId: 'unique()',
                         data: {
                             sessionId: this.sessionId,
                             ...data
@@ -73,10 +94,13 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to send analytics data');
+                    const errorData = await response.json();
+                    throw new Error(JSON.stringify(errorData));
                 }
+
+                console.log(`Successfully sent ${collection} data`);
             } catch (error) {
-                console.error('Analytics Error:', error);
+                console.error(`Analytics Error (${collection}):`, error);
             }
         }
 
@@ -90,6 +114,8 @@
 
             // Set up activity tracking
             this.setupActivityTracking();
+
+            console.log('Tracking started');
         }
 
         // Record page view
