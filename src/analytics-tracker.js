@@ -10,7 +10,7 @@
         endpoint: null,
         projectId: null,
         initialized: false,
-        DATABASE_ID: 'analytics_db',
+        DATABASE_ID: '6745fcdb00003df4618e',
         COLLECTIONS: {
             page_views: '67460888002b2e21ceae', // Update with your collection ID
             time_tracking: '67460945001156693068', // Update with your collection ID
